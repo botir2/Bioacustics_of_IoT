@@ -3,3 +3,11 @@ __pycache__/
 .env
 .venv
 !chainsaw_pi/results/**
+
+!chainsaw_pi/images/**
+
+!chainsaw_pi/models/**
+
+!chainsaw_pi/samples/**
+
+!chainsaw_pi/meta/**
