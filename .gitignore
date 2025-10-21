@@ -2,4 +2,4 @@ __pycache__/
 *.pyc
 .env
 .venv
-!hcainsaw_pi/results/**
+!chainsaw_pi/results/**
