@@ -1,0 +1,16 @@
+{
+  "mode": "single_file",
+  "config": {
+    "SR": 16000,
+    "N_MELS": 64,
+    "WIN_S": 1.0,
+    "HOP_S": 0.25,
+    "THRESH": 0.3,
+    "TH_ON": 0.3,
+    "TH_OFF": 0.21
+  },
+  "file": "/home/pi/chainsaw-pi/chainsawTest.wav",
+  "clip_score": 0.9809752702713013,
+  "decision": "CHAINSAW",
+  "n_events": 3
+}
