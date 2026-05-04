@@ -2,14 +2,41 @@
 
 ![Acoustic PCA 3-Class GUI](images/GUI.png)
 
-** Acoustic PCA 3-Class Classifier GUI.**  
-This prototype visualises uploaded WAV audio in a PCA feature space and classifies the recording into three classes: **Bird**, **No-bird**, and **Silence**.
+## Overview
 
-The green points represent silence samples, orange points represent bird samples, and blue points represent no-bird/background samples.  
-When a WAV file is uploaded, the system extracts acoustic features, projects the windows onto the PCA map, and uses a trained Random Forest classifier to produce a prediction and confidence score.
+This prototype demonstrates an ecoacoustic audio analysis workflow for visualising and classifying WAV recordings. It combines PCA-based feature-space visualisation with a 3-class Random Forest classifier.
 
-In the example above, the uploaded file was classified as:
+The system classifies uploaded audio into:
+
+- Bird / Keep
+- No-bird / Background
+- Silence / Drop
+
+## System Functionality
+
+The GUI includes the following buttons:
+
+- **Load Saved Map**  
+  Loads the saved acoustic feature map and displays the PCA map.
+
+- **Load 3-Class Classifier**  
+  Loads the trained Random Forest model and scaler.
+
+- **Load WAV + Predict**  
+  Uploads a WAV file, extracts acoustic features, projects the audio windows into PCA space, and predicts the class.
+
+- **START Trajectory**  
+  Animates the WAV file windows on the PCA map.
+
+- **STOP**  
+  Stops the trajectory animation.
+
+## Methodology
 
 ```text
-Prediction: BIRD / KEEP
-Confidence: 81.3%
+WAV audio
+→ window segmentation
+→ feature extraction
+→ PCA visualisation
+→ Random Forest classification
+→ Bird / No-bird / Silence decision
