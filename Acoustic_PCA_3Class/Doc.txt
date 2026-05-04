@@ -1,0 +1,277 @@
+Audio PCA Trajectory Visualiser – Project Continuation Notes
+
+Project goal
+The goal of this small project is to build a Python/PyQt6 tool that visualises acoustic signals in a PCA space, similar to a protein PCA trajectory plot. Instead of protein conformations, the system uses audio features extracted from bird/no-bird recordings. The long-term idea is to create a reference acoustic map from a labelled dataset, then place new WAV files or live microphone input into that map as moving points or trajectories.
+
+Current project folder
+The project was created in:
+
+C:\Users\bkarimov\OneDrive - University of Tasmania\Desktop\PCA trajectory
+
+Main files in the project:
+- main.py
+- build_feature_map.py
+- data\warblrb10k\warblrb10k_public_metadata.csv
+- data\warblrb10k\wav\
+- data\warblrb10k\features_map.csv
+
+Python environment
+The project is being run using a PyCharm virtual environment located at:
+
+C:\Users\bkarimov\PycharmProjects\PythonProject\.venv\Scripts\python.exe
+
+The command used to run scripts is:
+
+C:\Users\bkarimov\PycharmProjects\PythonProject\.venv\Scripts\python.exe main.py
+
+or:
+
+C:\Users\bkarimov\PycharmProjects\PythonProject\.venv\Scripts\python.exe build_feature_map.py
+
+Installed packages
+The following packages were installed into the virtual environment:
+- PyQt6
+- matplotlib
+- numpy
+- librosa
+- scikit-learn
+- soundfile
+- pandas
+
+Dataset used
+The dataset selected was the Bird Audio Detection dataset, specifically the warblrb10k section.
+
+The required dataset structure is:
+
+PCA trajectory
+├── main.py
+├── build_feature_map.py
+└── data
+    └── warblrb10k
+        ├── warblrb10k_public_metadata.csv
+        ├── features_map.csv
+        └── wav
+            ├── audio_file_1.wav
+            ├── audio_file_2.wav
+            └── ...
+
+The metadata file contains at least these columns:
+- itemid
+- hasbird
+
+The label interpretation is:
+- hasbird = 1 means bird sound is present
+- hasbird = 0 means no-bird / background sound
+
+What has already been done
+
+1. Initial PyQt6 GUI was created
+A first working PyQt6 application was built. It opened successfully and displayed:
+- Load WAV button
+- START button
+- STOP button
+- PCA plot area
+
+This confirmed that PyQt6 and matplotlib integration worked.
+
+2. Single WAV PCA trajectory was created
+The first version allowed the user to load a single WAV file. The program:
+- loaded the WAV using librosa
+- split the audio into windows
+- extracted audio features from each window
+- applied PCA to reduce the features to PC1 and PC2
+- animated the trajectory on the plot
+
+The features extracted from each audio window were:
+- RMS energy
+- zero-crossing rate
+- spectral centroid
+- spectral bandwidth
+- MFCC mean values
+
+Later, spectral rolloff was also added to make the feature vector match the dataset feature map.
+
+3. GUI was improved
+The GUI was redesigned so that:
+- buttons are on the left side
+- the plot is on the right side
+- buttons have colours
+- the background uses a darker professional style
+- status labels show the current state of the program
+
+Current left-side buttons:
+- Load Saved Map
+- Load WAV
+- START
+- STOP
+
+4. Dataset feature-map builder was created
+A second script called build_feature_map.py was created.
+
+Its purpose is to process the warblrb10k dataset once and save extracted features into a CSV file, so the system does not need to reprocess all WAV files every time.
+
+The output file is:
+
+data\warblrb10k\features_map.csv
+
+The feature map CSV stores:
+- itemid
+- label
+- f0, f1, f2, ..., f17
+
+Each row represents one audio file converted into an audio feature vector.
+
+5. Multiprocessing was added
+The first version of build_feature_map.py processed audio files one by one, which was slow.
+
+It was then rewritten using Python multiprocessing so multiple audio files can be processed in parallel using CPU cores.
+
+This made dataset feature extraction faster.
+
+6. Feature map was successfully created
+The output features_map.csv was created successfully.
+
+The result summary was:
+- 8000 audio files processed
+- 6045 files with label = 1
+- 1955 files with label = 0
+- feature columns f0 to f17
+
+This means the saved acoustic feature map is ready.
+
+Current meaning of the map
+The saved map is not a deep learning model. It is a feature-based acoustic map.
+
+Workflow:
+Dataset WAV files
+→ feature extraction
+→ saved feature map CSV
+→ StandardScaler
+→ PCA
+→ 2D acoustic map
+
+In this map:
+- bird audio should tend to fall near bird-labelled regions
+- no-bird/background audio should tend to fall near no-bird-labelled regions
+- a new WAV file can be transformed into the same PCA space and shown as a moving trajectory
+
+Important concept
+PCA is not a classifier by itself. It is an unsupervised dimensionality reduction method.
+
+Current system:
+- visualises acoustic behaviour
+- shows where an audio signal falls in the PCA feature space
+- can support later classification or routing logic
+
+Current interpretation:
+- label = 1 means bird present
+- label = 0 means no bird / background
+- a moving dot or trajectory shows the current audio window sequence in the PCA map
+
+7. main.py was upgraded to load the saved map
+The latest main.py version should include:
+- Load Saved Map button
+- Load WAV button
+- START button
+- STOP button
+
+Expected workflow inside the GUI:
+1. Click Load Saved Map
+2. The program loads data/warblrb10k/features_map.csv
+3. It fits StandardScaler and PCA using the saved features
+4. It plots the bird/no-bird acoustic map
+5. Click Load WAV
+6. Select a new WAV file
+7. The selected WAV is split into windows
+8. Features are extracted
+9. The saved scaler and PCA are used to transform the WAV features into the same map
+10. Click START
+11. The selected WAV moves as a trajectory over the dataset PCA map
+
+Commands to use
+
+Run the feature-map builder:
+C:\Users\bkarimov\PycharmProjects\PythonProject\.venv\Scripts\python.exe build_feature_map.py
+
+Run the GUI:
+C:\Users\bkarimov\PycharmProjects\PythonProject\.venv\Scripts\python.exe main.py
+
+Main idea for next continuation
+The current project has reached this stage:
+
+Saved dataset feature map
+→ Load into PyQt6
+→ Show bird/no-bird PCA map
+→ Load new WAV
+→ Show its trajectory on the same map
+
+Next planned step
+The next step is to add real-time microphone input.
+
+Planned real-time workflow:
+USB microphone
+→ record 1-second or 3-second audio window
+→ extract the same features
+→ apply the saved StandardScaler
+→ apply the saved PCA
+→ add the new point to the plot
+→ update the moving dot in real time
+
+Important design rule for real time:
+- PCA fitting should not happen in real time.
+- PCA transform can happen in real time.
+
+This makes the system fast because the map is already created.
+
+Possible future buttons:
+- START MIC
+- STOP MIC
+- Save Trajectory CSV
+- Add Noise
+- Clear Plot
+- Classify / Estimate Region
+
+Possible future status labels:
+- Possible bird
+- No-bird/background
+- Uncertain
+- Needs enhancement
+
+Relevance to the research project
+This tool can support the user's RQ1 pre-detection pipeline visualisation.
+
+Possible interpretation:
+- Clean bird sound may fall in a bird region
+- Noisy bird sound may shift away from the clean bird region
+- Noise reduction or enhancement may move the signal closer to the bird region
+- Silence or background may fall near no-bird regions
+
+This can help visualise:
+- acoustic degradation
+- feature-space shift
+- effect of noise
+- effect of enhancement
+- potential screening/routing behaviour
+
+Important caution
+This PCA plot is a visualisation and exploratory tool. It should not yet be described as a final bird detection classifier. A classifier or decision rule can be added later using methods such as:
+- nearest centroid
+- k-nearest neighbours
+- logistic regression
+- random forest
+- SVM
+- BirdNET-Lite
+- custom thresholding based on the PCA map
+
+Current recommended next task
+Continue by testing the latest main.py:
+
+1. Run main.py
+2. Click Load Saved Map
+3. Check that bird/no-bird map appears
+4. Click Load WAV
+5. Select a WAV file
+6. Click START
+7. Confirm the WAV trajectory appears on the map
+
+After this works, implement START MIC and STOP MIC for real-time USB microphone projection.

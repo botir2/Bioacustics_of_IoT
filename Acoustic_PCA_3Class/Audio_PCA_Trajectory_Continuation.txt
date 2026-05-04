@@ -1,0 +1,872 @@
+Audio PCA Trajectory Visualiser – Project Continuation Notes
+
+Project goal
+The goal of this small project is to build a Python/PyQt6 tool that visualises acoustic signals in a PCA space, similar to a protein PCA trajectory plot. Instead of protein conformations, the system uses audio features extracted from bird/no-bird recordings. The long-term idea is to create a reference acoustic map from a labelled dataset, then place new WAV files or live microphone input into that map as moving points or trajectories.
+
+Current project folder
+The project was created in:
+
+C:\Users\bkarimov\OneDrive - University of Tasmania\Desktop\PCA trajectory
+
+Main files in the project:
+- main.py
+- build_feature_map.py
+- data\warblrb10k\warblrb10k_public_metadata.csv
+- data\warblrb10k\wav\
+- data\warblrb10k\features_map.csv
+
+Python environment
+The project is being run using a PyCharm virtual environment located at:
+
+C:\Users\bkarimov\PycharmProjects\PythonProject\.venv\Scripts\python.exe
+
+The command used to run scripts is:
+
+C:\Users\bkarimov\PycharmProjects\PythonProject\.venv\Scripts\python.exe main.py
+
+or:
+
+C:\Users\bkarimov\PycharmProjects\PythonProject\.venv\Scripts\python.exe build_feature_map.py
+
+Installed packages
+The following packages were installed into the virtual environment:
+- PyQt6
+- matplotlib
+- numpy
+- librosa
+- scikit-learn
+- soundfile
+- pandas
+
+Dataset used
+The dataset selected was the Bird Audio Detection dataset, specifically the warblrb10k section.
+
+The required dataset structure is:
+
+PCA trajectory
+├── main.py
+├── build_feature_map.py
+└── data
+    └── warblrb10k
+        ├── warblrb10k_public_metadata.csv
+        ├── features_map.csv
+        └── wav
+            ├── audio_file_1.wav
+            ├── audio_file_2.wav
+            └── ...
+
+The metadata file contains at least these columns:
+- itemid
+- hasbird
+
+The label interpretation is:
+- hasbird = 1 means bird sound is present
+- hasbird = 0 means no-bird / background sound
+
+What has already been done
+
+1. Initial PyQt6 GUI was created
+A first working PyQt6 application was built. It opened successfully and displayed:
+- Load WAV button
+- START button
+- STOP button
+- PCA plot area
+
+This confirmed that PyQt6 and matplotlib integration worked.
+
+2. Single WAV PCA trajectory was created
+The first version allowed the user to load a single WAV file. The program:
+- loaded the WAV using librosa
+- split the audio into windows
+- extracted audio features from each window
+- applied PCA to reduce the features to PC1 and PC2
+- animated the trajectory on the plot
+
+The features extracted from each audio window were:
+- RMS energy
+- zero-crossing rate
+- spectral centroid
+- spectral bandwidth
+- MFCC mean values
+
+Later, spectral rolloff was also added to make the feature vector match the dataset feature map.
+
+3. GUI was improved
+The GUI was redesigned so that:
+- buttons are on the left side
+- the plot is on the right side
+- buttons have colours
+- the background uses a darker professional style
+- status labels show the current state of the program
+
+Current left-side buttons:
+- Load Saved Map
+- Load WAV
+- START
+- STOP
+
+4. Dataset feature-map builder was created
+A second script called build_feature_map.py was created.
+
+Its purpose is to process the warblrb10k dataset once and save extracted features into a CSV file, so the system does not need to reprocess all WAV files every time.
+
+The output file is:
+
+data\warblrb10k\features_map.csv
+
+The feature map CSV stores:
+- itemid
+- label
+- f0, f1, f2, ..., f17
+
+Each row represents one audio file converted into an audio feature vector.
+
+5. Multiprocessing was added
+The first version of build_feature_map.py processed audio files one by one, which was slow.
+
+It was then rewritten using Python multiprocessing so multiple audio files can be processed in parallel using CPU cores.
+
+This made dataset feature extraction faster.
+
+6. Feature map was successfully created
+The output features_map.csv was created successfully.
+
+The result summary was:
+- 8000 audio files processed
+- 6045 files with label = 1
+- 1955 files with label = 0
+- feature columns f0 to f17
+
+This means the saved acoustic feature map is ready.
+
+Current meaning of the map
+The saved map is not a deep learning model. It is a feature-based acoustic map.
+
+Workflow:
+Dataset WAV files
+→ feature extraction
+→ saved feature map CSV
+→ StandardScaler
+→ PCA
+→ 2D acoustic map
+
+In this map:
+- bird audio should tend to fall near bird-labelled regions
+- no-bird/background audio should tend to fall near no-bird-labelled regions
+- a new WAV file can be transformed into the same PCA space and shown as a moving trajectory
+
+Important concept
+PCA is not a classifier by itself. It is an unsupervised dimensionality reduction method.
+
+Current system:
+- visualises acoustic behaviour
+- shows where an audio signal falls in the PCA feature space
+- can support later classification or routing logic
+
+Current interpretation:
+- label = 1 means bird present
+- label = 0 means no bird / background
+- a moving dot or trajectory shows the current audio window sequence in the PCA map
+
+7. main.py was upgraded to load the saved map
+The latest main.py version should include:
+- Load Saved Map button
+- Load WAV button
+- START button
+- STOP button
+
+Expected workflow inside the GUI:
+1. Click Load Saved Map
+2. The program loads data/warblrb10k/features_map.csv
+3. It fits StandardScaler and PCA using the saved features
+4. It plots the bird/no-bird acoustic map
+5. Click Load WAV
+6. Select a new WAV file
+7. The selected WAV is split into windows
+8. Features are extracted
+9. The saved scaler and PCA are used to transform the WAV features into the same map
+10. Click START
+11. The selected WAV moves as a trajectory over the dataset PCA map
+
+Commands to use
+
+Run the feature-map builder:
+C:\Users\bkarimov\PycharmProjects\PythonProject\.venv\Scripts\python.exe build_feature_map.py
+
+Run the GUI:
+C:\Users\bkarimov\PycharmProjects\PythonProject\.venv\Scripts\python.exe main.py
+
+Main idea for next continuation
+The current project has reached this stage:
+
+Saved dataset feature map
+→ Load into PyQt6
+→ Show bird/no-bird PCA map
+→ Load new WAV
+→ Show its trajectory on the same map
+
+Next planned step
+The next step is to add real-time microphone input.
+
+Planned real-time workflow:
+USB microphone
+→ record 1-second or 3-second audio window
+→ extract the same features
+→ apply the saved StandardScaler
+→ apply the saved PCA
+→ add the new point to the plot
+→ update the moving dot in real time
+
+Important design rule for real time:
+- PCA fitting should not happen in real time.
+- PCA transform can happen in real time.
+
+This makes the system fast because the map is already created.
+
+Possible future buttons:
+- START MIC
+- STOP MIC
+- Save Trajectory CSV
+- Add Noise
+- Clear Plot
+- Classify / Estimate Region
+
+Possible future status labels:
+- Possible bird
+- No-bird/background
+- Uncertain
+- Needs enhancement
+
+Relevance to the research project
+This tool can support the user's RQ1 pre-detection pipeline visualisation.
+
+Possible interpretation:
+- Clean bird sound may fall in a bird region
+- Noisy bird sound may shift away from the clean bird region
+- Noise reduction or enhancement may move the signal closer to the bird region
+- Silence or background may fall near no-bird regions
+
+This can help visualise:
+- acoustic degradation
+- feature-space shift
+- effect of noise
+- effect of enhancement
+- potential screening/routing behaviour
+
+Important caution
+This PCA plot is a visualisation and exploratory tool. It should not yet be described as a final bird detection classifier. A classifier or decision rule can be added later using methods such as:
+- nearest centroid
+- k-nearest neighbours
+- logistic regression
+- random forest
+- SVM
+- BirdNET-Lite
+- custom thresholding based on the PCA map
+
+Current recommended next task
+Continue by testing the latest main.py:
+
+1. Run main.py
+2. Click Load Saved Map
+3. Check that bird/no-bird map appears
+4. Click Load WAV
+5. Select a WAV file
+6. Click START
+7. Confirm the WAV trajectory appears on the map
+
+After this works, implement START MIC and STOP MIC for real-time USB microphone projection.
+
+8. Real-time microphone input was added
+
+The GUI has now been extended beyond WAV-file trajectory playback. Real-time microphone projection has been added.
+
+New GUI elements added:
+- Microphone dropdown selector
+- Refresh Mic List button
+- START MIC button
+- STOP MIC button
+
+The program now uses the Python sounddevice package to read available system microphones using:
+
+sd.query_devices()
+
+The microphone dropdown shows input devices in this format:
+
+index: device name (backend)
+
+Example devices seen on the Windows system:
+- 0: Microsoft Sound Mapper - Input (MME)
+- 1: Desktop Microphone (Microsoft, MME)
+- 2: Microphone Array (Realtek, MME)
+- 8: Desktop Microphone (Microsoft LifeCam Studio, DirectSound)
+- 18: Desktop Microphone (Microsoft LifeCam Studio, WASAPI)
+- 32: Desktop Microphone (Microsoft LifeCam Studio, WDM-KS)
+
+The headset microphone was removed during testing, so it no longer appeared in the device list. The active/default microphone became the Desktop Microphone.
+
+Recommended microphone testing order:
+1. 1: Desktop Microphone (MME)
+2. 8: Desktop Microphone / LifeCam Studio (DirectSound)
+3. 18: Desktop Microphone / LifeCam Studio (WASAPI)
+4. 0: Microsoft Sound Mapper - Input (MME)
+5. 2: Microphone Array (Realtek, MME)
+6. 17: Microphone Array (WASAPI), if available
+
+Devices that should usually be avoided:
+- Stereo Mix
+- PC Speaker
+- Speakers
+- WDM-KS devices, unless the other backends fail
+
+9. Current real-time microphone workflow
+
+The intended real-time workflow is:
+
+1. Run main.py
+2. Click Load Saved Map
+3. Select a microphone from the dropdown
+4. Click START MIC
+5. Play sound from a phone or speak near the microphone
+6. The program records a short audio window
+7. The same audio features are extracted
+8. The saved StandardScaler is applied
+9. The saved PCA model is applied
+10. The new point is added to the PCA map
+11. The moving trajectory is updated on the plot
+
+The real-time audio window currently uses:
+
+MIC_SR = 44100
+MIC_DURATION = 1.0
+
+This means the system records 1 second of audio at 44.1 kHz each time the timer fires.
+
+The microphone timer currently updates approximately every 1.5 seconds:
+
+self.mic_timer.start(1500)
+
+10. Important real-time design rule
+
+The system should not fit PCA in real time.
+
+Correct approach:
+Dataset feature map
+→ fit StandardScaler once
+→ fit PCA once
+→ use these fitted objects for real-time transform
+
+Real-time input:
+Microphone audio
+→ extract feature vector
+→ scaler.transform()
+→ pca.transform()
+→ plot point
+
+This makes the system fast enough because only feature extraction and PCA transform are done during live operation.
+
+11. Microphone error encountered
+
+During testing, this error appeared:
+
+Mic error: Error opening InputStream
+
+This usually means one of the following:
+- the selected microphone index is not valid
+- the selected backend does not support the chosen sample rate
+- another app is using the microphone
+- Windows microphone permission is disabled
+- the selected device is an output device, not an input device
+- WDM-KS backend is not behaving well with sounddevice
+
+Troubleshooting steps:
+1. Press STOP MIC before changing devices.
+2. Try another microphone from the dropdown.
+3. Start with MME or DirectSound devices.
+4. Avoid Stereo Mix, Speakers, and PC Speaker devices.
+5. Try MIC_SR = 44100 first.
+6. If 44100 fails, try MIC_SR = 48000.
+7. Close Teams, Zoom, browser tabs, or other apps that may be using the microphone.
+8. Check Windows microphone permission:
+   Settings → Privacy & security → Microphone
+   - Microphone access should be ON
+   - Let desktop apps access your microphone should be ON
+
+12. Code change made for microphone selection
+
+The earlier version used a fixed microphone index such as:
+
+MIC_DEVICE_INDEX = 24
+
+This was replaced with a GUI dropdown-based device selector.
+
+The program now uses:
+
+selected_device = self.mic_combo.currentData()
+
+and then records audio using:
+
+audio = sd.rec(
+    int(MIC_DURATION * MIC_SR),
+    samplerate=MIC_SR,
+    channels=1,
+    dtype="float32",
+    device=selected_device
+)
+
+This allows the user to select different system microphones without manually editing the code.
+
+13. Current main.py capability
+
+The latest main.py should now support:
+
+- Load Saved Map
+- Load WAV
+- START / STOP trajectory animation for a WAV file
+- Microphone dropdown
+- Refresh Mic List
+- START MIC
+- STOP MIC
+- Real-time microphone projection into the PCA map
+
+The current system can now do two kinds of trajectory visualisation:
+
+A. Offline WAV trajectory:
+Saved PCA map
+→ Load WAV
+→ extract features from audio windows
+→ transform into PCA space
+→ animate trajectory
+
+B. Real-time microphone trajectory:
+Saved PCA map
+→ select microphone
+→ START MIC
+→ record short audio windows
+→ extract features
+→ transform into PCA space
+→ update live trajectory
+
+14. Current testing status
+
+The saved map loads successfully.
+
+The saved map summary:
+- 8000 samples loaded
+- PCA variance around 41.7%
+- labels are bird/no-bird
+- label = 1 means bird
+- label = 0 means no-bird/background
+
+Microphone integration is coded, but the microphone needs to be tested with the correct input device and sample rate.
+
+The latest observed available input devices after removing the headset included:
+- 1: Desktop Microphone (Microsoft, MME)
+- 2: Microphone Array (Realtek, MME)
+- 8: Desktop Microphone (Microsoft LifeCam Studio, DirectSound)
+- 17: Microphone Array (WASAPI)
+- 18: Desktop Microphone (Microsoft LifeCam Studio, WASAPI)
+- 32: Desktop Microphone (Microsoft LifeCam Studio, WDM-KS)
+
+The next practical test should be:
+1. Select device 1
+2. Click START MIC
+3. If error, click STOP MIC
+4. Select device 8
+5. Click START MIC
+6. If error, try device 18
+7. If still error, try MIC_SR = 48000
+
+15. Current interpretation of live results
+
+If the microphone works, the expected interpretation is:
+
+- A live point near the bird-labelled region suggests bird-like acoustic features.
+- A live point near the no-bird-labelled region suggests background/no-bird sound.
+- A moving path shows how the sound changes over time.
+- Playing bird sound from a phone near the microphone should move the live trajectory according to the feature behaviour of that sound.
+
+This is still not a final classifier. It is a live projection into a feature-based PCA map.
+
+16. Next planned improvement
+
+Once the microphone stream works reliably, the next improvement should be automatic region estimation.
+
+Possible next method:
+- Calculate centroid of bird points in PCA space.
+- Calculate centroid of no-bird points in PCA space.
+- For each live point, compute distance to both centroids.
+- If closer to bird centroid, show “Possible bird”.
+- If closer to no-bird centroid, show “No-bird/background”.
+- If distance difference is small, show “Uncertain”.
+
+Possible future status labels:
+- Possible bird
+- No-bird/background
+- Uncertain
+- Needs enhancement
+
+17. Command reminders
+
+Run GUI:
+
+C:\Users\bkarimov\PycharmProjects\PythonProject\.venv\Scripts\python.exe main.py
+
+Run microphone device checker:
+
+C:\Users\bkarimov\PycharmProjects\PythonProject\.venv\Scripts\python.exe micheck.py
+
+Important: commands must be run separately. Do not paste two commands on the same line.
+
+Correct:
+C:\Users\bkarimov\PycharmProjects\PythonProject\.venv\Scripts\python.exe micheck.py
+
+Then:
+C:\Users\bkarimov\PycharmProjects\PythonProject\.venv\Scripts\python.exe main.py
+
+Incorrect:
+C:\Users\bkarimov\PycharmProjects\PythonProject\.venv\Scripts\python.exe micheck.pyC:\Users\bkarimov\PycharmProjects\PythonProject\.venv\Scripts\python.exe main.py
+
+18. Current overall project status
+
+The project has reached this state:
+
+Dataset WAV files
+→ feature extraction using build_feature_map.py
+→ saved features_map.csv
+→ PyQt6 GUI loads saved feature map
+→ PCA bird/no-bird acoustic map is plotted
+→ WAV files can be projected as trajectories
+→ microphone input is being integrated for live projection
+→ microphone dropdown has been added
+→ the next task is to stabilise real-time recording by selecting the correct microphone and sample rate
+
+The project is now a working acoustic PCA visualisation prototype, with real-time microphone support under testing.
+
+19. Stable version after microphone problems
+
+After testing, the Windows real-time microphone version was not stable. The program repeatedly returned microphone/InputStream errors. Because of this, the stable desktop workflow was simplified again.
+
+The current stable Windows workflow is:
+
+Saved feature map
+→ Load Saved Map
+→ Load WAV
+→ START
+→ visualise the selected WAV file as a PCA trajectory
+
+The microphone dropdown and real-time mic controls were removed from the stable Windows version because they caused device/backend errors.
+
+Current stable GUI buttons:
+- Load Saved Map
+- Load WAV
+- START
+- STOP
+
+The note shown in the GUI should say something like:
+
+Stable workflow:
+1. Load Saved Map
+2. Load WAV
+3. START trajectory
+
+Real-time mic was tested but disabled due to device errors.
+Use recorded WAV files.
+
+20. Visual style was adjusted
+
+At one point the PCA map points became too small and too transparent. The map looked too faint.
+
+The corrected visual settings are:
+
+No-bird points:
+s = 8
+alpha = 0.28
+edgecolors = "none"
+
+Bird points:
+s = 8
+alpha = 0.32
+edgecolors = "none"
+
+Trajectory line:
+linewidth = 1.4
+
+Current moving point:
+s = 120
+
+Start point:
+s = 100
+
+These settings make the map visible without making the trajectory too thick.
+
+21. Raspberry Pi real-time USB microphone version
+
+A separate Raspberry Pi version was prepared for testing with a USB microphone. This version is intended for Raspberry Pi, not the current Windows machine.
+
+Raspberry Pi microphone settings:
+
+MIC_DEVICE_INDEX = None
+MIC_SR = 16000
+MIC_DURATION = 1.0
+MIC_UPDATE_MS = 1800
+
+Meaning:
+- MIC_DEVICE_INDEX = None uses the default input microphone.
+- If the USB microphone has a known device index, set it manually, for example MIC_DEVICE_INDEX = 2.
+- MIC_SR = 16000 is suitable for the acoustic feature extraction pipeline.
+- MIC_DURATION = 1.0 records one second per update.
+- MIC_UPDATE_MS = 1800 updates the live point every 1.8 seconds.
+
+Raspberry Pi command to list devices:
+
+python3 -c "import sounddevice as sd; print(sd.query_devices())"
+
+If default microphone does not work, replace:
+
+MIC_DEVICE_INDEX = None
+
+with the USB microphone index, for example:
+
+MIC_DEVICE_INDEX = 2
+
+Raspberry Pi installation commands suggested:
+
+sudo apt update
+sudo apt install -y portaudio19-dev python3-pyqt6
+pip install numpy pandas librosa scikit-learn matplotlib sounddevice soundfile
+
+22. Silence class was added
+
+A new third class was introduced:
+
+label 0 = No-bird / background
+label 1 = Bird
+label 2 = Silence / quiet
+
+The purpose of this class is to represent very quiet audio or no useful acoustic activity.
+
+This supports the RQ1-style logic:
+
+Silence / very low activity → DROP
+Bird-like signal → DIRECT PASS
+Noisy / uncertain signal → NEEDS ENHANCEMENT
+
+A new folder was created:
+
+data/silence_wav/
+
+This folder contains silence or quiet-background WAV files such as:
+
+silence_0000.wav
+silence_0001.wav
+silence_0002.wav
+
+23. Recording silence data
+
+A script was proposed to record 5 minutes of silence/quiet background and split it into 5-second WAV files.
+
+If 5 minutes are recorded:
+
+5 minutes = 300 seconds
+300 / 5 = 60 WAV files
+
+Example output:
+
+data/silence_wav/
+├── silence_0000.wav
+├── silence_0001.wav
+├── ...
+└── silence_0059.wav
+
+Important observation:
+60 silence files are too few compared with the 8000 bird/no-bird dataset rows. In the PCA map, the silence points appeared as a small green cluster because there were only a small number of silence samples.
+
+Recommended next silence dataset size:
+- minimum: 300 silence clips
+- better: 500 silence clips
+
+A 30-minute silence/quiet recording split into 5-second clips gives:
+
+30 minutes = 1800 seconds
+1800 / 5 = 360 files
+
+A 1-hour recording split into 5-second clips gives:
+
+60 minutes = 3600 seconds
+3600 / 5 = 720 files
+
+24. Adding silence features
+
+A script called add_silence_features.py was created/planned.
+
+Its purpose is:
+
+data/silence_wav/*.wav
+→ extract the same 18 features
+→ assign label = 2
+→ append to the existing feature map
+→ save as a new CSV
+
+Input feature map:
+data/warblrb10k/features_map.csv
+
+Silence audio folder:
+data/silence_wav/
+
+Output feature map:
+data/warblrb10k/features_map_with_silence.csv
+
+The output CSV should contain all classes:
+
+itemid,label,f0,f1,...,f17
+
+where:
+- label 0 = No-bird
+- label 1 = Bird
+- label 2 = Silence
+
+25. Updating main.py for silence
+
+The feature map path in main.py should be changed from:
+
+FEATURE_MAP_PATH = "data/warblrb10k/features_map.csv"
+
+to:
+
+FEATURE_MAP_PATH = "data/warblrb10k/features_map_with_silence.csv"
+
+The draw_map() function should define three label masks:
+
+no_bird = self.map_labels == 0
+bird = self.map_labels == 1
+silence = self.map_labels == 2
+
+Then three scatter groups should be drawn:
+
+No-bird:
+self.ax.scatter(..., label="No-bird")
+
+Bird:
+self.ax.scatter(..., label="Bird")
+
+Silence:
+self.ax.scatter(..., label="Silence")
+
+Suggested silence point style:
+s = 18
+alpha = 0.70
+edgecolors = "none"
+label = "Silence"
+
+After this change, the legend should show:
+- No-bird
+- Bird
+- Silence
+
+26. Meaning of the extracted feature values
+
+The values in features_map.csv and features_map_with_silence.csv are not random. Each row is one audio file converted into an 18-dimensional feature vector.
+
+The columns mean:
+
+f0 = RMS energy
+f1 = zero-crossing rate
+f2 = spectral centroid
+f3 = spectral bandwidth
+f4 = spectral rolloff
+f5 to f17 = MFCC 1 to MFCC 13
+
+Interpretation:
+- RMS energy represents signal strength.
+- Zero-crossing rate describes how often the waveform crosses zero.
+- Spectral centroid represents the brightness or centre of mass of the spectrum.
+- Spectral bandwidth represents how spread out the frequencies are.
+- Spectral rolloff represents the frequency below which most spectral energy is located.
+- MFCCs represent the spectral/timbre shape of the sound.
+
+Pipeline:
+
+WAV audio
+→ librosa feature extraction
+→ 18 feature values
+→ PCA reduces 18D to 2D
+→ Random Forest or another classifier can later use the same 18 features for prediction
+
+27. Literature support for the features
+
+The selected features are standard in audio signal processing and bioacoustic/audio classification.
+
+Important references to use later:
+- Davis and Mermelstein (1980): MFCCs for speech representation.
+- Peeters (2004): audio feature catalogue including spectral descriptors.
+- Tzanetakis and Cook (2002): RMS, ZCR, and spectral features in audio classification.
+- Stowell and Plumbley (2014): large-scale bird sound classification using audio features.
+- Jolliffe (2002): Principal Component Analysis.
+
+Suggested methodology sentence:
+
+Audio features were extracted from each waveform segment, including RMS energy, zero-crossing rate, spectral centroid, spectral bandwidth, spectral rolloff, and Mel-Frequency Cepstral Coefficients (MFCCs), which are widely used in audio signal analysis and bioacoustic classification.
+
+28. Current PCA map with silence
+
+After adding the silence class, the PCA plot showed:
+
+- blue points: No-bird
+- orange points: Bird
+- green points: Silence
+
+The silence points appeared as a compact green group near the upper part of the PCA plot. This is expected because the silence data are currently too few and likely too similar.
+
+Current issue:
+Silence data are underrepresented compared with bird/no-bird data.
+
+Current fix:
+Record or generate more silence/quiet clips, ideally 300 to 500 clips, then rerun add_silence_features.py and reload the map.
+
+29. Next recommended work
+
+The next work should proceed in this order:
+
+1. Increase silence dataset size.
+   - Record 30 minutes of quiet background, or generate 300-500 synthetic/quiet files.
+
+2. Rebuild the silence-extended feature map.
+   - Run add_silence_features.py again.
+   - Confirm features_map_with_silence.csv has labels 0, 1, and 2.
+
+3. Update main.py to use:
+   FEATURE_MAP_PATH = "data/warblrb10k/features_map_with_silence.csv"
+
+4. Confirm the GUI legend shows:
+   No-bird, Bird, Silence.
+
+5. Then add a classifier.
+   Recommended first classifier:
+   Random Forest
+
+Classifier pipeline:
+features_map_with_silence.csv
+→ f0 to f17 features
+→ labels 0, 1, 2
+→ train Random Forest
+→ save model as bird_classifier.pkl or acoustic_classifier.pkl
+
+Prediction output should eventually be:
+- Bird
+- No-bird/background
+- Silence
+- confidence score
+
+30. Current important conclusion
+
+The current PCA visualiser is not yet an AI classifier.
+
+Current system:
+audio → features → PCA → visual map
+
+This is unsupervised visualisation.
+
+Next AI step:
+features → Random Forest → Bird / No-bird / Silence
+
+In the GUI, PCA should continue to draw the points and trajectory, while Random Forest should provide the automatic prediction label and confidence.
