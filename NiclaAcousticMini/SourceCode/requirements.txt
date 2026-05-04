@@ -1,0 +1,9 @@
+# Core deep learning + audio
+torch
+torchaudio
+librosa
+matplotlib
+numpy
+pandas
+seaborn
+tqdm
