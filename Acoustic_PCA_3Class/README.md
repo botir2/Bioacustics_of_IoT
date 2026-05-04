@@ -1,6 +1,6 @@
 # Acoustic PCA 3-Class Classifier
 
-![Acoustic PCA 3-Class GUI](images/GUI.png)
+![Acoustic PCA 3-Class GUI](GUI.png)
 
 ## Overview
 
