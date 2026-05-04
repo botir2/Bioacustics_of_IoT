@@ -40,3 +40,11 @@ WAV audio
 → PCA visualisation
 → Random Forest classification
 → Bird / No-bird / Silence decision
+
+
+Dataset sources:
+
+DCASE 2018 Bird Audio Detection Task
+https://dcase.community/challenge2018/task-bird-audio-detection
+Kaggle Bird Audio Detection competition
+https://www.kaggle.com/competitions/bird-audio-detection
