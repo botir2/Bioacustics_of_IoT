@@ -1,0 +1,6 @@
+data/warblrb10k/wav/ 
+data/silence_wav/ 
+*.wav 
+.venv/ 
+__pycache__/ 
+*.pyc 
