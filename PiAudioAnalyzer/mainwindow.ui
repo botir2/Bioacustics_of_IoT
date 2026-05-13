@@ -1,0 +1,1563 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1500</width>
+    <height>1082</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Acoustic Signal Analyzer</string>
+  </property>
+  <property name="styleSheet">
+   <string>
+QMainWindow { background-color: #070B12; }
+QWidget#centralwidget { background-color: #070B12; color: #E5E7EB; }
+QFrame#sidebarFrame, QFrame#mainFrame { background-color: #0B111A; border: 1px solid #263241; border-radius: 8px; }
+QLabel { color: #E5E7EB; }
+QLabel#titleLabel { color: #F8FAFC; background-color: transparent; font-size: 22px; font-weight: bold; padding: 8px; }
+QGroupBox { background-color: #101826; color: #E5E7EB; border: 1px solid #334155; border-radius: 8px; margin-top: 12px; padding: 8px; font-weight: bold; }
+QGroupBox::title { subcontrol-origin: margin; left: 10px; padding: 0 6px; color: #22D3EE; font-weight: bold; }
+QPushButton { background-color: #172033; color: #F8FAFC; border: 1px solid #334155; border-radius: 6px; padding: 8px 12px; font-weight: bold; }
+QPushButton:hover { background-color: #263241; }
+QPushButton#btnUpload, QPushButton#btnAnalyse, QPushButton#btnRefreshDevices { background-color: #0F766E; border-color: #14B8A6; }
+QPushButton#btnStartRealtime { background-color: #2563EB; border-color: #60A5FA; }
+QPushButton#btnStopRealtime { background-color: #DC2626; border-color: #F87171; }
+
+
+QLineEdit, QTextEdit, QSpinBox {
+    background-color: #060B14;
+    color: #E5E7EB;
+    border: 1px solid #334155;
+    border-radius: 6px;
+    padding: 5px;
+}
+
+QComboBox {
+    background-color: #060B14;
+    color: #E5E7EB;
+    border: 1px solid #334155;
+    border-radius: 6px;
+    padding: 5px;
+}
+
+QComboBox::drop-down {
+    border: none;
+    width: 24px;
+}
+
+QComboBox QAbstractItemView {
+    background-color: #060B14;
+    color: #E5E7EB;
+    selection-background-color: #0F766E;
+    selection-color: #FFFFFF;
+    border: 1px solid #22D3EE;
+    outline: 0px;
+}
+
+
+QCheckBox { color: #E5E7EB; font-weight: bold; }
+QTabWidget::pane { border: 1px solid #334155; background-color: #0B111A; border-radius: 6px; }
+QTabBar::tab { background-color: #172033; color: #CBD5E1; padding: 8px 14px; border: 1px solid #334155; border-top-left-radius: 6px; border-top-right-radius: 6px; }
+QTabBar::tab:selected { background-color: #0F172A; color: #FFFFFF; border-bottom: 2px solid #22D3EE; }
+QTabBar::tab:hover { background-color: #263241; }
+QLabel#lblWaveform, QLabel#lblFFT, QLabel#lblSpectrogram, QLabel#lblRealtimeWaveform, QLabel#lblRealtimeSpectrogram, QLabel#lblRealtimeMelSpectrogram, QLabel#lblRealtimeLogMelSpectrogram, QLabel#lblRealtimeMfccHeatmap, QLabel#lbl3DStftSurface { background-color: #020617; color: #E5E7EB; border: 1px solid #334155; border-radius: 6px; }
+QLabel#lblRealtimeStatus, QLabel#lblRealtimeMetrics, QLabel#lblRealtimeMelMetrics, QLabel#lblRealtimeLogMelMetrics, QLabel#lblFeatureModeStatus, QLabel#lbl3DStftMetrics { background-color: #020617; color: #93C5FD; border: 1px solid #334155; border-radius: 6px; padding: 6px; font-weight: bold; }
+QPushButton#btnRecord {
+    background-color: #B91C1C;
+    border-color: #F87171;
+    color: white;
+}
+QPushButton#btnSaveRecording {
+    background-color: #0F766E;
+    border-color: #14B8A6;
+    color: white;
+}
+QLabel#lblRecordTime {
+    background-color: #020617;
+    color: #22D3EE;
+    border: 1px solid #334155;
+    border-radius: 6px;
+    padding: 6px;
+    font-weight: bold;
+}
+QLabel#lblNoiseThresholdValue,
+QLabel#lblNoiseStrengthValue,
+QLabel#lblNoiseSmoothingValue {
+    color: #22D3EE;
+    font-weight: bold;
+}
+QLabel#lblNoiseReductionPreview {
+    background-color: #020617;
+    color: #E5E7EB;
+    border: 1px solid #334155;
+    border-radius: 6px;
+}
+QLabel#lblNoiseReductionMetrics {
+    background-color: #020617;
+    color: #93C5FD;
+    border: 1px solid #334155;
+    border-radius: 6px;
+    padding: 6px;
+    font-weight: bold;
+}
+QSlider::groove:horizontal {
+    height: 6px;
+    background: #020617;
+    border: 1px solid #334155;
+    border-radius: 3px;
+}
+QSlider::handle:horizontal {
+    background: #22D3EE;
+    border: 1px solid #67E8F9;
+    width: 14px;
+    margin: -5px 0;
+    border-radius: 7px;
+}
+QSlider::sub-page:horizontal {
+    background: #0F766E;
+    border-radius: 3px;
+}
+QLabel#lblNoiseOriginalSpectrogram,
+QLabel#lblNoiseReducedSpectrogram {
+    background-color: #020617;
+    color: #E5E7EB;
+    border: 1px solid #334155;
+    border-radius: 6px;
+}
+QLabel#lblNoiseReductionMetrics {
+    background-color: #020617;
+    color: #93C5FD;
+    border: 1px solid #334155;
+    border-radius: 6px;
+    padding: 6px;
+    font-weight: bold;
+}
+QPushButton#btnRecordClean {
+    background-color: #B91C1C;
+    border-color: #F87171;
+    color: white;
+}
+QPushButton#btnSaveCleanRecording {
+    background-color: #0F766E;
+    border-color: #14B8A6;
+    color: white;
+}
+QLabel#lblCleanRecordTime {
+    background-color: #020617;
+    color: #22D3EE;
+    border: 1px solid #334155;
+    border-radius: 6px;
+    padding: 6px;
+    font-weight: bold;
+}
+</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="rootLayout">
+    <item>
+     <widget class="QLabel" name="titleLabel">
+      <property name="text">
+       <string>Acoustic Pi Signal Analyzer</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="mainHorizontalLayout">
+      <item>
+       <widget class="QFrame" name="sidebarFrame">
+        <property name="minimumSize">
+         <size>
+          <width>260</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>320</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <layout class="QVBoxLayout" name="sidebarLayout">
+         <item>
+          <widget class="QGroupBox" name="groupFileControls">
+           <property name="title">
+            <string>File-based Analysis</string>
+           </property>
+           <layout class="QVBoxLayout" name="fileControlLayout">
+            <item>
+             <widget class="QPushButton" name="btnUpload">
+              <property name="text">
+               <string>Upload WAV File</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="txtFilePath">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+              <property name="placeholderText">
+               <string>Selected WAV path...</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnAnalyse">
+              <property name="text">
+               <string>Analyse</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupRealtimeControls">
+           <property name="title">
+            <string>Real-time Analysis</string>
+           </property>
+           <layout class="QVBoxLayout" name="realtimeControlLayout">
+            <item>
+             <widget class="QLabel" name="lblInputDevice">
+              <property name="text">
+               <string>Input device</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="cmbInputDevice"/>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnRefreshDevices">
+              <property name="text">
+               <string>Refresh Devices</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="lblSampleRate">
+              <property name="text">
+               <string>Sample rate</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="cmbSampleRate">
+              <item>
+               <property name="text">
+                <string>16000</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>44100</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="lblWindowSize">
+              <property name="text">
+               <string>STFT window</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="cmbWindowSize">
+              <item>
+               <property name="text">
+                <string>1024</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>2048</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>4096</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="lblHopSize">
+              <property name="text">
+               <string>Hop size</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="cmbHopSize">
+              <item>
+               <property name="text">
+                <string>512</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>1024</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnStartRealtime">
+              <property name="text">
+               <string>Start Real-time</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnStopRealtime">
+              <property name="text">
+               <string>Stop</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="recordButtonLayout">
+              <item>
+               <widget class="QPushButton" name="btnRecord">
+                <property name="styleSheet">
+                 <string>background-color: #B91C1C; color: white; border: 1px solid #F87171; border-radius: 6px; padding: 8px 12px; font-weight: bold;</string>
+                </property>
+                <property name="text">
+                 <string>REC</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btnSaveRecording">
+                <property name="styleSheet">
+                 <string>background-color: #0F766E; color: white; border: 1px solid #14B8A6; border-radius: 6px; padding: 8px 12px; font-weight: bold;</string>
+                </property>
+                <property name="text">
+                 <string>Save WAV</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QLabel" name="lblRecordTime">
+              <property name="styleSheet">
+               <string>background-color: #020617; color: #22D3EE; border: 1px solid #334155; border-radius: 6px; padding: 6px; font-weight: bold;</string>
+              </property>
+              <property name="text">
+               <string>Recording time: 00:00</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignmentFlag::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="lblRealtimeStatus">
+              <property name="text">
+               <string>Stopped</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupFeatureControls">
+           <property name="title">
+            <string>Feature Parameters</string>
+           </property>
+           <layout class="QVBoxLayout" name="featureControlLayout">
+            <item>
+             <widget class="QLabel" name="lblFeatureModeStatus">
+              <property name="text">
+               <string>Selected feature: Real-time STFT</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QStackedWidget" name="stackFeatureParams">
+              <widget class="QWidget" name="pageMelParams">
+               <layout class="QGridLayout" name="melParamsLayout">
+                <item row="0" column="0">
+                 <widget class="QLabel" name="lblMelFilterCount">
+                  <property name="text">
+                   <string>Mel filters:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QComboBox" name="cmbMelFilterCount">
+                  <item>
+                   <property name="text">
+                    <string>26</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>40</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>64</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="lblMelMinFreq">
+                  <property name="text">
+                   <string>Min freq:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QSpinBox" name="spinMelMinFreq">
+                  <property name="suffix">
+                   <string> Hz</string>
+                  </property>
+                  <property name="minimum">
+                   <number>0</number>
+                  </property>
+                  <property name="maximum">
+                   <number>20000</number>
+                  </property>
+                  <property name="value">
+                   <number>100</number>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="lblMelMaxFreq">
+                  <property name="text">
+                   <string>Max freq:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QSpinBox" name="spinMelMaxFreq">
+                  <property name="suffix">
+                   <string> Hz</string>
+                  </property>
+                  <property name="minimum">
+                   <number>1000</number>
+                  </property>
+                  <property name="maximum">
+                   <number>24000</number>
+                  </property>
+                  <property name="value">
+                   <number>8000</number>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="lblMelPowerMode">
+                  <property name="text">
+                   <string>Energy:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QComboBox" name="cmbMelPowerMode">
+                  <item>
+                   <property name="text">
+                    <string>Power</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Magnitude</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+              <widget class="QWidget" name="pageLogMelParams">
+               <layout class="QGridLayout" name="logMelParamsLayout">
+                <item row="0" column="0">
+                 <widget class="QLabel" name="lblLogMelFilterCount">
+                  <property name="text">
+                   <string>Mel filters:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QComboBox" name="cmbLogMelFilterCount">
+                  <item>
+                   <property name="text">
+                    <string>26</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>40</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>64</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="lblLogMelMinFreq">
+                  <property name="text">
+                   <string>Min freq:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QSpinBox" name="spinLogMelMinFreq">
+                  <property name="suffix">
+                   <string> Hz</string>
+                  </property>
+                  <property name="minimum">
+                   <number>0</number>
+                  </property>
+                  <property name="maximum">
+                   <number>20000</number>
+                  </property>
+                  <property name="value">
+                   <number>100</number>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="lblLogMelMaxFreq">
+                  <property name="text">
+                   <string>Max freq:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QSpinBox" name="spinLogMelMaxFreq">
+                  <property name="suffix">
+                   <string> Hz</string>
+                  </property>
+                  <property name="minimum">
+                   <number>1000</number>
+                  </property>
+                  <property name="maximum">
+                   <number>24000</number>
+                  </property>
+                  <property name="value">
+                   <number>8000</number>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="lblLogMelEpsilon">
+                  <property name="text">
+                   <string>Epsilon:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QComboBox" name="cmbLogMelEpsilon">
+                  <item>
+                   <property name="text">
+                    <string>1e-6</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>1e-8</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>1e-10</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+                <item row="4" column="0">
+                 <widget class="QLabel" name="lblLogMelDisplayMode">
+                  <property name="text">
+                   <string>Display:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="1">
+                 <widget class="QComboBox" name="cmbLogMelDisplayMode">
+                  <item>
+                   <property name="text">
+                    <string>dB</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Natural log</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+              <widget class="QWidget" name="pageMfccParams">
+               <layout class="QGridLayout" name="mfccParamsLayout">
+                <item row="0" column="0">
+                 <widget class="QLabel" name="lblMfccCoeffCount">
+                  <property name="text">
+                   <string>MFCC coeffs:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QComboBox" name="cmbMfccCoeffCount">
+                  <item>
+                   <property name="text">
+                    <string>13</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>20</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>40</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="lblMfccMelFilterCount">
+                  <property name="text">
+                   <string>Mel filters:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QComboBox" name="cmbMfccMelFilterCount">
+                  <item>
+                   <property name="text">
+                    <string>26</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>40</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>64</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="lblMfccMinFreq">
+                  <property name="text">
+                   <string>Min freq:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QSpinBox" name="spinMfccMinFreq">
+                  <property name="suffix">
+                   <string> Hz</string>
+                  </property>
+                  <property name="minimum">
+                   <number>0</number>
+                  </property>
+                  <property name="maximum">
+                   <number>20000</number>
+                  </property>
+                  <property name="value">
+                   <number>100</number>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="lblMfccMaxFreq">
+                  <property name="text">
+                   <string>Max freq:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QSpinBox" name="spinMfccMaxFreq">
+                  <property name="suffix">
+                   <string> Hz</string>
+                  </property>
+                  <property name="minimum">
+                   <number>1000</number>
+                  </property>
+                  <property name="maximum">
+                   <number>24000</number>
+                  </property>
+                  <property name="value">
+                   <number>8000</number>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="0" colspan="2">
+                 <widget class="QCheckBox" name="chkMfccUseC0">
+                  <property name="text">
+                   <string>Include C0 energy coefficient</string>
+                  </property>
+                  <property name="checked">
+                   <bool>false</bool>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+              <widget class="QWidget" name="pageNormalizationParams">
+               <layout class="QVBoxLayout" name="normalizationParamsLayout">
+                <item>
+                 <widget class="QLabel" name="lblNormalizationFeatureNote">
+                  <property name="text">
+                   <string>Normalisation controls are shown inside the Normalisation tab.</string>
+                  </property>
+                  <property name="wordWrap">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+              <widget class="QWidget" name="pageNoiseReduceParams">
+               <layout class="QVBoxLayout" name="noiseReduceParamsLayout">
+                <item>
+                 <widget class="QCheckBox" name="chkNoiseReduce">
+                  <property name="text">
+                   <string>Enable Noise Reduction</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="lblNoiseReduceMode">
+                  <property name="text">
+                   <string>Mode</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="cmbNoiseReduceMode">
+                  <item>
+                   <property name="text">
+                    <string>Stationary</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Non-stationary</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="lblNoiseThresholdTitleLayout">
+                  <item>
+                   <widget class="QLabel" name="lblNoiseThresholdTitle">
+                    <property name="text">
+                     <string>Noise threshold</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLabel" name="lblNoiseThresholdValue">
+                    <property name="text">
+                     <string>0.35</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <widget class="QSlider" name="sliderNoiseThreshold">
+                  <property name="minimum">
+                   <number>0</number>
+                  </property>
+                  <property name="maximum">
+                   <number>100</number>
+                  </property>
+                  <property name="value">
+                   <number>35</number>
+                  </property>
+                  <property name="orientation">
+                   <enum>Qt::Orientation::Horizontal</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="lblNoiseStrengthTitleLayout">
+                  <item>
+                   <widget class="QLabel" name="lblNoiseStrengthTitle">
+                    <property name="text">
+                     <string>Reduction strength</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLabel" name="lblNoiseStrengthValue">
+                    <property name="text">
+                     <string>0.70</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <widget class="QSlider" name="sliderNoiseStrength">
+                  <property name="minimum">
+                   <number>0</number>
+                  </property>
+                  <property name="maximum">
+                   <number>100</number>
+                  </property>
+                  <property name="value">
+                   <number>70</number>
+                  </property>
+                  <property name="orientation">
+                   <enum>Qt::Orientation::Horizontal</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="lblNoiseSmoothingTitleLayout">
+                  <item>
+                   <widget class="QLabel" name="lblNoiseSmoothingTitle">
+                    <property name="text">
+                     <string>Mask smoothing</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLabel" name="lblNoiseSmoothingValue">
+                    <property name="text">
+                     <string>0.50</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <widget class="QSlider" name="sliderNoiseSmoothing">
+                  <property name="minimum">
+                   <number>0</number>
+                  </property>
+                  <property name="maximum">
+                   <number>100</number>
+                  </property>
+                  <property name="value">
+                   <number>50</number>
+                  </property>
+                  <property name="orientation">
+                   <enum>Qt::Orientation::Horizontal</enum>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <spacer name="sidebarSpacer">
+           <property name="orientation">
+            <enum>Qt::Orientation::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QFrame" name="mainFrame">
+        <layout class="QVBoxLayout" name="mainContentLayout">
+         <item>
+          <widget class="QTabWidget" name="tabView">
+           <property name="currentIndex">
+            <number>9</number>
+           </property>
+           <widget class="QWidget" name="tabWaveform">
+            <attribute name="title">
+             <string>Waveform (Time)</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="waveformLayout">
+             <item>
+              <widget class="QLabel" name="lblWaveform">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>550</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Time-domain waveform view will appear here</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tabFFT">
+            <attribute name="title">
+             <string>FFT (Frequency)</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="fftLayout">
+             <item>
+              <widget class="QLabel" name="lblFFT">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>550</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Frequency-domain FFT spectrum view will appear here</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tabSpectrogram">
+            <attribute name="title">
+             <string>Spectrogram (STFT)</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="spectrogramLayout">
+             <item>
+              <widget class="QLabel" name="lblSpectrogram">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>550</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>File-based STFT spectrogram will appear here</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tabRealtime">
+            <attribute name="title">
+             <string>Real-time STFT</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="realtimeTabLayout">
+             <item>
+              <widget class="QLabel" name="lblRealtimeWaveform">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>150</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Live waveform</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="lblRealtimeSpectrogram">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>430</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Live STFT spectrogram will appear here after Start Real-time</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="lblRealtimeMetrics">
+               <property name="text">
+                <string>RMS, peak level, dominant frequency, and sample rate will appear here.</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tabRealtimeMel">
+            <attribute name="title">
+             <string>Mel Spectrogram</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="realtimeMelLayout">
+             <item>
+              <widget class="QLabel" name="lblRealtimeMelSpectrogram">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>600</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Real-time Mel spectrogram will appear here</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="lblRealtimeMelMetrics">
+               <property name="text">
+                <string>Mel filter count, frequency range, and frame metrics will appear here.</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tabRealtimeLogMel">
+            <attribute name="title">
+             <string>Log-Mel Spectrogram</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="realtimeLogMelLayout">
+             <item>
+              <widget class="QLabel" name="lblRealtimeLogMelSpectrogram">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>600</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Real-time Log-Mel spectrogram will appear here</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="lblRealtimeLogMelMetrics">
+               <property name="text">
+                <string>Log-Mel display mode, epsilon, and frame metrics will appear here.</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tabRealtimeMFCC">
+            <attribute name="title">
+             <string>MFCC</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="realtimeMfccLayout">
+             <item>
+              <widget class="QLabel" name="lblRealtimeMfccHeatmap">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>470</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Real-time MFCC heatmap will appear here</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QTextEdit" name="txtRealtimeMfccValues">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>120</height>
+                </size>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+               <property name="placeholderText">
+                <string>Current MFCC coefficients will appear here...</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tab3DStftSurface">
+            <attribute name="title">
+             <string>3D STFT Surface</string>
+            </attribute>
+            <layout class="QHBoxLayout" name="surface3DMainLayout">
+             <item>
+              <layout class="QVBoxLayout" name="surface3DLeftLayout">
+               <item>
+                <widget class="QGroupBox" name="group3DWaveform">
+                 <property name="title">
+                  <string>Time-Domain (Waveform)</string>
+                 </property>
+                 <layout class="QVBoxLayout" name="layout3DWaveform">
+                  <item>
+                   <widget class="QLabel" name="lbl3DWaveformPreview">
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>160</height>
+                     </size>
+                    </property>
+                    <property name="styleSheet">
+                     <string>background-color: #020617; color: #E5E7EB; border: 1px solid #334155; border-radius: 6px;</string>
+                    </property>
+                    <property name="text">
+                     <string>Waveform preview will appear here</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QGroupBox" name="group3DFft">
+                 <property name="title">
+                  <string>Frequency-Domain (FFT Spectrum)</string>
+                 </property>
+                 <layout class="QVBoxLayout" name="layout3DFft">
+                  <item>
+                   <widget class="QLabel" name="lbl3DFftPreview">
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>180</height>
+                     </size>
+                    </property>
+                    <property name="styleSheet">
+                     <string>background-color: #020617; color: #E5E7EB; border: 1px solid #334155; border-radius: 6px;</string>
+                    </property>
+                    <property name="text">
+                     <string>FFT preview will appear here</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QGroupBox" name="group3DStft2D">
+                 <property name="title">
+                  <string>Time-Frequency (2D STFT Spectrogram)</string>
+                 </property>
+                 <layout class="QVBoxLayout" name="layout3DStft2D">
+                  <item>
+                   <widget class="QLabel" name="lbl3DStft2DPreview">
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>230</height>
+                     </size>
+                    </property>
+                    <property name="styleSheet">
+                     <string>background-color: #020617; color: #E5E7EB; border: 1px solid #334155; border-radius: 6px;</string>
+                    </property>
+                    <property name="text">
+                     <string>2D STFT spectrogram preview will appear here</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QVBoxLayout" name="surface3DRightLayout">
+               <item>
+                <widget class="QGroupBox" name="group3DSurface">
+                 <property name="title">
+                  <string>3D STFT Spectrogram Surface</string>
+                 </property>
+                 <layout class="QVBoxLayout" name="layout3DSurface">
+                  <item>
+                   <widget class="QLabel" name="lbl3DStftSurface">
+                    <property name="minimumSize">
+                     <size>
+                      <width>620</width>
+                      <height>610</height>
+                     </size>
+                    </property>
+                    <property name="styleSheet">
+                     <string>background-color: #020617; color: #E5E7EB; border: 1px solid #334155; border-radius: 6px; font-size: 15px;</string>
+                    </property>
+                    <property name="text">
+                     <string>3D STFT Surface placeholder
+						X = Time
+						Y = Frequency
+						Z = Magnitude / dB
+						The real 3D renderer will be connected here.</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="lbl3DStftMetrics">
+                 <property name="styleSheet">
+                  <string>background-color: #020617; color: #93C5FD; border: 1px solid #334155; border-radius: 6px; padding: 6px; font-weight: bold;</string>
+                 </property>
+                 <property name="text">
+                  <string>3D STFT Surface: waiting for real-time data.</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tabNormalization">
+            <attribute name="title">
+             <string>Normalisation</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="normalizationTabLayout">
+             <item>
+              <widget class="QGroupBox" name="groupNormalizationControls">
+               <property name="title">
+                <string>Normalisation Method</string>
+               </property>
+               <layout class="QHBoxLayout" name="normalizationControlsLayout">
+                <item>
+                 <widget class="QLabel" name="lblNormalizationMethod">
+                  <property name="text">
+                   <string>Method:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="cmbNormalizationMethod">
+                  <item>
+                   <property name="text">
+                    <string>Peak normalisation</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Z-score normalisation</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Min-max normalisation</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>RMS normalisation</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Mean centring</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="lblNormalizationNote">
+                  <property name="text">
+                   <string>Select the waveform normalisation method used for the after-normalisation STFT.</string>
+                  </property>
+                  <property name="wordWrap">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="groupNormalizationBefore">
+               <property name="title">
+                <string>Before normalisation STFT</string>
+               </property>
+               <layout class="QVBoxLayout" name="layoutNormalizationBefore">
+                <item>
+                 <widget class="QLabel" name="lblNormalizationBeforeSpectrogram">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>260</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string>background-color: #020617; color: #E5E7EB; border: 1px solid #334155; border-radius: 6px;</string>
+                  </property>
+                  <property name="text">
+                   <string>Before-normalisation STFT will appear here after Start Real-time</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignmentFlag::AlignCenter</set>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="groupNormalizationAfter">
+               <property name="title">
+                <string>After normalisation STFT</string>
+               </property>
+               <layout class="QVBoxLayout" name="layoutNormalizationAfter">
+                <item>
+                 <widget class="QLabel" name="lblNormalizationAfterSpectrogram">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>260</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string>background-color: #020617; color: #E5E7EB; border: 1px solid #334155; border-radius: 6px;</string>
+                  </property>
+                  <property name="text">
+                   <string>After-normalisation STFT will appear here after Start Real-time</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignmentFlag::AlignCenter</set>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="lblNormalizationMetrics">
+               <property name="styleSheet">
+                <string>background-color: #020617; color: #93C5FD; border: 1px solid #334155; border-radius: 6px; padding: 6px; font-weight: bold;</string>
+               </property>
+               <property name="text">
+                <string>Normalisation: waiting for real-time data.</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tabNoiseReduction">
+            <attribute name="title">
+             <string>Noise Reduction</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="noiseReductionTabLayout">
+             <item>
+              <widget class="QGroupBox" name="groupNoiseOriginal">
+               <property name="title">
+                <string>Original Real-time STFT</string>
+               </property>
+               <layout class="QVBoxLayout" name="layoutNoiseOriginal">
+                <item>
+                 <widget class="QLabel" name="lblNoiseOriginalSpectrogram">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>260</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string>background-color: #020617; color: #E5E7EB; border: 1px solid #334155; border-radius: 6px;</string>
+                  </property>
+                  <property name="text">
+                   <string>Original STFT will appear here after Start Real-time</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignmentFlag::AlignCenter</set>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="groupNoiseReduced">
+               <property name="title">
+                <string>Noise-reduced STFT</string>
+               </property>
+               <layout class="QVBoxLayout" name="layoutNoiseReduced">
+                <item>
+                 <widget class="QLabel" name="lblNoiseReducedSpectrogram">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>260</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string>background-color: #020617; color: #E5E7EB; border: 1px solid #334155; border-radius: 6px;</string>
+                  </property>
+                  <property name="text">
+                   <string>Noise-reduced STFT will appear here after Start Real-time</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignmentFlag::AlignCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="cleanRecordButtonLayout">
+                  <item>
+                   <widget class="QPushButton" name="btnRecordClean">
+                    <property name="text">
+                     <string>REC Clean</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="btnSaveCleanRecording">
+                    <property name="text">
+                     <string>Save Clean WAV</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <spacer name="horizontalSpacer">
+                    <property name="orientation">
+                     <enum>Qt::Orientation::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <widget class="QLabel" name="lblCleanRecordTime">
+                  <property name="text">
+                   <string>Clean recording time: 00:00</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignmentFlag::AlignCenter</set>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="lblNoiseReductionMetrics">
+               <property name="styleSheet">
+                <string>background-color: #020617; color: #93C5FD; border: 1px solid #334155; border-radius: 6px; padding: 6px; font-weight: bold;</string>
+               </property>
+               <property name="text">
+                <string>Noise Reduction: disabled</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="resultRightCornerLayout">
+           <item>
+            <spacer name="resultLeftSpacer">
+             <property name="orientation">
+              <enum>Qt::Orientation::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QTextEdit" name="txtResult">
+             <property name="minimumSize">
+              <size>
+               <width>360</width>
+               <height>85</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>420</width>
+               <height>100</height>
+              </size>
+             </property>
+             <property name="placeholderText">
+              <string>Analysis results will appear here...</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1500</width>
+     <height>19</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
