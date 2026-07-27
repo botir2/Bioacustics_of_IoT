@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Acoustic</string>
+    <!-- Replace this with your actual Web Client ID from Firebase Console -->
+    <string name="default_web_client_id">YOUR_WEB_CLIENT_ID_HERE.apps.googleusercontent.com</string>
+
+    <!-- Facebook Login -->
+    <string name="facebook_app_id">2399693403842092</string>
+    <string name="fb_login_protocol_scheme">fb2399693403842092</string>
+    <string name="facebook_client_token">325713e4c9d68fb092d5450e694e4868</string>
+
+    <string name="observation_detail">Observation Detail</string>
+    <string name="back">Back</string>
+    <string name="animal_image">Animal Image</string>
+    <string name="sugar_glider">Sugar Glider</string>
+    <string name="scientific_name">Petaurus breviceps</string>
+    <string name="confidence">Confidence</string>
+    <string name="timestamp">Timestamp</string>
+    <string name="status_on">On</string>
+    <string name="status_off">Off</string>
+    <string name="batt_label">Batt.</string>
+    <string name="online_label">Online</string>
+    <string name="mon_label">Mon.</string>
+    <string name="night_mode">Night Mode</string>
+    <string name="light_mode">Light Mode</string>
+</resources>

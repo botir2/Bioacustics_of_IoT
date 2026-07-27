@@ -1,0 +1,28 @@
+<resources>
+    <style name="Theme.Telegram" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Main colors -->
+        <item name="colorPrimary">@color/app_accent</item>
+        <item name="colorPrimaryVariant">@color/app_accent</item>
+        <item name="colorOnPrimary">@android:color/white</item>
+        <item name="colorSecondary">@color/app_accent</item>
+
+        <!-- Theme backgrounds and text colors -->
+        <item name="android:windowBackground">@color/app_bg</item>
+        <item name="colorSurface">@color/app_card_bg</item>
+        <item name="colorOnSurface">@color/app_text_primary</item>
+        <item name="android:textColorPrimary">@color/app_text_primary</item>
+        <item name="android:textColorSecondary">@color/app_text_secondary</item>
+
+        <!-- Control colors -->
+        <item name="colorControlNormal">@color/app_text_secondary</item>
+        <item name="colorControlActivated">@color/app_accent</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.App.CornerSize50Percent" parent="">
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="RoundedCornersImage" parent="">
+        <item name="cornerSize">12dp</item>
+    </style>
+</resources>

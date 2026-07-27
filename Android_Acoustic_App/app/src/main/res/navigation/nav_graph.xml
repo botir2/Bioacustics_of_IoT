@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/nav_dashboard">
+
+    <fragment
+        android:id="@+id/nav_dashboard"
+        android:name="com.example.acousticapp.dashboard.DashboardFragment"
+        android:label="Dashboard"
+        tools:layout="@layout/fragment_dashboard" />
+
+    <fragment
+        android:id="@+id/nav_map"
+        android:name="com.example.acousticapp.map.MapFragment"
+        android:label="Map"
+        tools:layout="@layout/fragment_map" />
+
+    <fragment
+        android:id="@+id/nav_devices"
+        android:name="com.example.acousticapp.devices.DevicesFragment"
+        android:label="Devices"
+        tools:layout="@layout/fragment_devices" />
+
+    <fragment
+        android:id="@+id/nav_bluetooth"
+        android:name="com.example.acousticapp.bluetooth.BluetoothDevicesFragment"
+        android:label="Bluetooth"
+        tools:layout="@layout/fragment_bluetooth" />
+
+    <fragment
+        android:id="@+id/nav_history"
+        android:name="com.example.acousticapp.history.DetectionHistoryFragment"
+        android:label="History"
+        tools:layout="@layout/fragment_history" />
+
+    <fragment
+        android:id="@+id/nav_profile"
+        android:name="com.example.acousticapp.profile.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/nav_bluetooth_detail"
+        android:name="com.example.acousticapp.bluetooth.BluetoothDeviceDetailFragment"
+        android:label="Bluetooth Detail"
+        tools:layout="@layout/fragment_bluetooth_detail" />
+
+</navigation>

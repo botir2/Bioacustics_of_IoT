@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App Theme Colors (Dark Mode) -->
+    <color name="app_bg">#06121C</color>
+    <color name="app_card_bg">#0B1D2A</color>
+    <color name="app_text_primary">#F5F7FA</color>
+    <color name="app_text_secondary">#AEB7C2</color>
+    <color name="app_accent">#00BCD4</color>
+    <color name="app_card_secondary">#102535</color>
+    <color name="app_divider">#2C3138</color>
+
+    <!-- Legacy Dashboard Compatibility -->
+    <color name="dash_bg">@color/app_bg</color>
+    <color name="dash_card_bg">@color/app_card_bg</color>
+    <color name="dash_card_secondary">#102535</color>
+    <color name="dash_teal">@color/app_accent</color>
+    <color name="dash_white">@color/app_text_primary</color>
+    <color name="dash_grey">@color/app_text_secondary</color>
+    <color name="dash_divider">@color/app_divider</color>
+</resources>
